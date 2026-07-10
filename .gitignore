@@ -43,6 +43,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+#my files
 /lib/config.dart
-/lib/services/api_service.dart
-/lib/services/firebase_services.dart
+/lib/api_services/api_service.dart
+/lib/api_services/firebase_services.dart
