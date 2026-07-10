@@ -1,0 +1,172 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:wien_tech_admin/models/user_model.dart';
+import 'package:wien_tech_admin/pages/logs_page.dart';
+import 'package:wien_tech_admin/pages/user_posts.dart';
+
+class UserDetailPage extends StatelessWidget {
+  final User user;
+  const UserDetailPage({super.key, required this.user});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(user.userName, style: TextStyle(fontSize: 14)),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            spacing: 10,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(shape: BoxShape.circle),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(80),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        placeholder: (c, _) => const SizedBox(),
+                        cacheKey: user.profilePhotoKey,
+                        imageUrl: user.profilePhotoUrl,
+                        errorWidget: (context, url, error) =>
+                            Icon(Icons.broken_image, color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                    ),
+                    onPressed: () {},
+                    child: Text(
+                      'Profil Fotografini Sil',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 30,
+                child: Row(
+                  spacing: 10,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('Biyografi: ${user.bio}'),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
+                      onPressed: () {},
+                      child: Text(
+                        'Bioyu Sil',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 30,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Hesap Durumu:'),
+                    Text(user.isDeleted ? 'Silindi' : 'Aktif'),
+                  ],
+                ),
+              ),
+
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                  ),
+                  itemCount: _userPageContainlist(context).length,
+                  itemBuilder: (context, index) =>
+                      _userPageContainlist(context)[index],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _userPageContainlist(BuildContext context) {
+    return [
+      _userPageContainCart(
+        color: Colors.pink.withOpacity(0.5),
+        text: 'Paylaşımlar',
+        icon: Icons.photo,
+        func: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => UserPosts(user: user)),
+          );
+        },
+      ),
+      _userPageContainCart(
+        color: Colors.blue.withOpacity(0.5),
+        text: 'Loglar',
+        icon: Icons.sign_language_outlined,
+        func: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LogsPage(userId: user.id)),
+          );
+        },
+      ),
+      _userPageContainCart(
+        color: Colors.orange.withOpacity(0.5),
+        text: 'Raporlar',
+        icon: Icons.report,
+      ),
+      _userPageContainCart(
+        color: Colors.red.withOpacity(0.5),
+        text: 'İstekler',
+        icon: Icons.photo_album,
+      ),
+    ];
+  }
+
+  Widget _userPageContainCart({
+    required String text,
+    required IconData icon,
+    required Color color,
+    Function? func,
+  }) {
+    return InkWell(
+      onTap: func != null
+          ? () {
+              func();
+            }
+          : null,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: color,
+          ),
+          child: Column(
+            spacing: 10,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 40, color: Colors.white),
+              Text(text, style: TextStyle(fontSize: 15, color: Colors.white)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

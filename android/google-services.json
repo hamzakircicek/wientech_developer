@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "482064459537",
+    "project_id": "wien-tech-admin",
+    "storage_bucket": "wien-tech-admin.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:482064459537:android:c0b269bdb5bb450010ceb0",
+        "android_client_info": {
+          "package_name": "com.wientechnology.admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdx1MrwX1Izw3Yft16BzXV874jDT32H6E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

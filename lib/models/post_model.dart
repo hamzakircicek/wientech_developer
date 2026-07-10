@@ -1,0 +1,50 @@
+import 'package:wien_tech_admin/models/media_model.dart';
+import 'package:wien_tech_admin/models/user_model.dart';
+
+class PostModel {
+  final bool status;
+  final List<Post> postList;
+  final Cursor? cursor;
+  PostModel({required this.status, required this.postList, this.cursor});
+
+  factory PostModel.fromJson(Map<String, dynamic> json) {
+    return PostModel(
+      status: json['status'] ?? false,
+      postList: getPostList(json['posts']),
+      cursor: json['nextCursor'] == null
+          ? null
+          : Cursor.fromJson(json['nextCursor']),
+    );
+  }
+
+  static getPostList(List json) => json.map((e) => Post.fromJson(e)).toList();
+}
+
+class Post {
+  String postId;
+  User user;
+  List<MediaModel> mediaList;
+  String postMessage;
+  String createdAt;
+
+  Post({
+    required this.postId,
+    required this.user,
+    required this.mediaList,
+    required this.postMessage,
+    required this.createdAt,
+  });
+
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      postId: json['_id'],
+      user: User.fromJson(json['user']),
+      mediaList: getMediaList(json['mediaList']),
+      postMessage: json['post_message'],
+      createdAt: json['createdAt'],
+    );
+  }
+
+  static getMediaList(List json) =>
+      json.map((e) => MediaModel.fromJson(e)).toList();
+}
