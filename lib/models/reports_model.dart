@@ -29,7 +29,7 @@ class Report {
   final String reportTargetType;
   final Post? post;
   final String? conversationId;
-  final List<MediaModel>? mediaList;
+  final List<EvidenceMediaModel>? mediaList;
   final String reportStatus;
   final String adminNote;
   final String updatedAt;
@@ -65,6 +65,6 @@ class Report {
     );
   }
 
-  static List<MediaModel> getMediaList(List json) =>
-      json.map((e) => MediaModel.fromJson(e)).toList();
+  static List<EvidenceMediaModel> getMediaList(List json) =>
+      json.map((e) => EvidenceMediaModel.fromJson(e)).toList();
 }

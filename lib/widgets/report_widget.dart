@@ -116,7 +116,7 @@ class ReportWidget extends StatelessWidget {
   }
 
   Widget _conversationReport({
-    required List<MediaModel> mediaList,
+    required List<EvidenceMediaModel> mediaList,
     required String message,
   }) {
     return Container(

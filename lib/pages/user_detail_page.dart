@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wien_tech_admin/models/user_model.dart';
 import 'package:wien_tech_admin/pages/logs_page.dart';
+import 'package:wien_tech_admin/pages/supports_page.dart';
 import 'package:wien_tech_admin/pages/user_posts.dart';
 
 class UserDetailPage extends StatelessWidget {
@@ -130,10 +131,19 @@ class UserDetailPage extends StatelessWidget {
         text: 'Raporlar',
         icon: Icons.report,
       ),
+
       _userPageContainCart(
-        color: Colors.red.withOpacity(0.5),
-        text: 'İstekler',
-        icon: Icons.photo_album,
+        color: const Color.fromARGB(255, 38, 226, 148).withOpacity(0.5),
+        text: 'Destek Talepleri',
+        icon: Icons.contact_support,
+        func: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SupportsPage(userId: user.id),
+            ),
+          );
+        },
       ),
     ];
   }

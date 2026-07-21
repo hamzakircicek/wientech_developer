@@ -1,52 +1,149 @@
-import 'package:wien_tech_admin/models/user_model.dart';
-
-class SupportModel {
-  final bool status;
-  final List<Support> supportlist;
-  final Cursor? cursor;
-  SupportModel({required this.status, required this.supportlist, this.cursor});
-
-  factory SupportModel.fromJson(Map<String, dynamic> json) {
-    return SupportModel(
-      status: json['status'],
-      supportlist: json['supportlist'],
-      cursor: json['nextCursor'],
-    );
-  }
-
-  static List<Support> getReportList(List json) =>
-      json.map((e) => Support.fromJson(e)).toList();
+enum SupportType {
+  initial,
+  suggestion,
+  technic,
+  premium,
+  account,
+  post,
+  security,
+  message,
+  profile,
 }
 
-class Support {
-  final String id;
-  final String supportType;
-  final String message;
-  final User suporterUser;
+enum SupportStatus { pending, solved, rejected }
 
-  final String supportStatus;
-  final String adminNote;
-  final String updatedAt;
+class AllSupportsModel {
+  final bool status;
+  final List<SupportModel> supports;
+  final SupportCursor? cursor;
+  final bool hasMore;
 
-  Support({
-    required this.id,
-    required this.supportType,
-    required this.message,
-    required this.suporterUser,
-    required this.adminNote,
-    required this.supportStatus,
-    required this.updatedAt,
+  AllSupportsModel({
+    required this.status,
+    required this.supports,
+    this.cursor,
+    required this.hasMore,
   });
 
-  factory Support.fromJson(Map<String, dynamic> json) {
-    return Support(
-      id: json['id'],
-      supportType: json['support_type'],
-      message: json['message'],
-      suporterUser: User.fromJson(json['support_user']),
-      adminNote: json['admin_note'],
-      supportStatus: json['status'],
-      updatedAt: json['updatedAt'],
-    );
+  factory AllSupportsModel.fromJson(Map<String, dynamic> j) => AllSupportsModel(
+    status: j["status"],
+    supports: SupportModel.getSupportsModelList(j["supports"]),
+    cursor: j["cursor"] != null ? SupportCursor.fromJson(j["cursor"]) : null,
+    hasMore: j["hasMore"],
+  );
+}
+
+class SupportModel {
+  final SupportType type;
+  final String message;
+  final SupportUserModel user;
+  final SupportStatus supportStatus;
+  SupportModel({
+    required this.type,
+    required this.supportStatus,
+    required this.user,
+    required this.message,
+  });
+
+  factory SupportModel.fromJson(Map<String, dynamic> json) => SupportModel(
+    type: parseSupportType(json['support_type']),
+    message: json['message'],
+    user: SupportUserModel.fromJson(json['supported_user']),
+    supportStatus: parseSupportStatus(json['support_status']),
+  );
+
+  static List<SupportModel> getSupportsModelList(List json) {
+    return json
+        .map((e) => SupportModel.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
+  }
+
+  static SupportType parseSupportType(String type) {
+    switch (type) {
+      case 'premium':
+        return SupportType.premium;
+      case 'account':
+        return SupportType.account;
+      case 'post':
+        return SupportType.post;
+      case 'security':
+        return SupportType.security;
+      case 'message':
+        return SupportType.message;
+      case 'profile':
+        return SupportType.profile;
+      case 'technic':
+        return SupportType.technic;
+      case 'suggestion':
+        return SupportType.suggestion;
+      default:
+        return SupportType.initial;
+    }
+  }
+
+  static SupportStatus parseSupportStatus(String type) {
+    switch (type) {
+      case 'pending':
+        return SupportStatus.pending;
+      case 'solved':
+        return SupportStatus.solved;
+      case 'rejected':
+        return SupportStatus.rejected;
+      default:
+        return SupportStatus.pending;
+    }
+  }
+}
+
+class SupportUserModel {
+  String id;
+  String userName;
+  String userProfilePhotoUrl;
+  SupportUserModel({
+    required this.id,
+    required this.userName,
+    required this.userProfilePhotoUrl,
+  });
+
+  factory SupportUserModel.fromJson(Map<String, dynamic> json) =>
+      SupportUserModel(
+        id: json['_id'],
+        userName: json['user_name'],
+        userProfilePhotoUrl: json['profile_photo_url'],
+      );
+}
+
+class SendedSupportModel {
+  final bool status;
+  final String? supportId;
+  final String supportMessage;
+
+  SendedSupportModel({
+    required this.status,
+    this.supportId,
+    required this.supportMessage,
+  });
+
+  factory SendedSupportModel.fromJson(Map<String, dynamic> json) =>
+      SendedSupportModel(
+        status: json['status'],
+        supportId: json['support_id'],
+        supportMessage: json['message'],
+      );
+}
+
+class SupportCursor {
+  final String? createdAt;
+  final String? id;
+  SupportCursor({this.createdAt, this.id});
+
+  factory SupportCursor.fromJson(Map<String, dynamic> json) =>
+      SupportCursor(createdAt: json['createdAt'] ?? '', id: json['_id'] ?? '');
+  static Map<String, dynamic> toMap(SupportCursor? cursor) {
+    if (cursor == null) {
+      return {};
+    } else {
+      return {'createdAt': cursor.createdAt, '_id': cursor.id};
+    }
   }
 }

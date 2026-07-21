@@ -3,13 +3,17 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wien_tech_admin/bloc/bios_bloc/bloc.dart';
+import 'package:wien_tech_admin/bloc/login_bloc/bloc.dart';
 import 'package:wien_tech_admin/bloc/logs_bloc/bloc.dart';
 import 'package:wien_tech_admin/bloc/main_page_bloc/bloc.dart';
 import 'package:wien_tech_admin/bloc/post_page_bloc/bloc.dart';
 import 'package:wien_tech_admin/bloc/profile_photos_bloc/bloc.dart';
+import 'package:wien_tech_admin/bloc/register_bloc/bloc.dart';
 import 'package:wien_tech_admin/bloc/report_support_bloc/bloc.dart';
+import 'package:wien_tech_admin/bloc/support_bloc/bloc.dart';
 import 'package:wien_tech_admin/bloc/users_bloc/bloc.dart';
 import 'package:wien_tech_admin/firebase_options.dart';
+import 'package:wien_tech_admin/pages/login.dart';
 import 'package:wien_tech_admin/pages/main_page.dart';
 
 @pragma('vm:entry-point')
@@ -38,13 +42,16 @@ class WienTechAdmin extends StatelessWidget {
         BlocProvider(create: (_) => PostPageBloc()),
         BlocProvider(create: (_) => ProfilePhotoBloc()),
         BlocProvider(create: (_) => BiosBloc()),
+        BlocProvider(create: (_) => RegisterBloc()),
+        BlocProvider(create: (_) => LoginBloc()),
+        BlocProvider(create: (_) => SupportBloc()),
         BlocProvider(create: (_) => ReportsSupportsPageBloc()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
 
-        home: MainPage(),
+        home: LoginPage(),
       ),
     );
   }

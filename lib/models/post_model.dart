@@ -5,7 +5,13 @@ class PostModel {
   final bool status;
   final List<Post> postList;
   final Cursor? cursor;
-  PostModel({required this.status, required this.postList, this.cursor});
+  final bool hasMore;
+  PostModel({
+    required this.status,
+    required this.postList,
+    this.cursor,
+    required this.hasMore,
+  });
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
@@ -14,10 +20,12 @@ class PostModel {
       cursor: json['nextCursor'] == null
           ? null
           : Cursor.fromJson(json['nextCursor']),
+      hasMore: json['hasMore'] ?? false,
     );
   }
 
-  static getPostList(List json) => json.map((e) => Post.fromJson(e)).toList();
+  static List<Post> getPostList(List json) =>
+      json.map((e) => Post.fromJson(e)).toList();
 }
 
 class Post {
@@ -45,6 +53,6 @@ class Post {
     );
   }
 
-  static getMediaList(List json) =>
+  static List<MediaModel> getMediaList(List json) =>
       json.map((e) => MediaModel.fromJson(e)).toList();
 }

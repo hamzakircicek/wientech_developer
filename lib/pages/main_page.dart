@@ -8,6 +8,7 @@ import 'package:wien_tech_admin/pages/new_bios_page.dart';
 import 'package:wien_tech_admin/pages/new_profile_photos.dart';
 import 'package:wien_tech_admin/pages/posts_page.dart';
 import 'package:wien_tech_admin/pages/reports_supports_page.dart';
+import 'package:wien_tech_admin/pages/supports_page.dart';
 import 'package:wien_tech_admin/pages/users_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -23,14 +24,11 @@ class _MainPageState extends State<MainPage> {
     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Paylaşımlar'),
     BottomNavigationBarItem(
       icon: Icon(Icons.person),
-      label: 'Profil Footoğrafları',
+      label: 'Profil Fotoğrafları',
     ),
     BottomNavigationBarItem(icon: Icon(Icons.edit), label: 'Biolar'),
 
-    BottomNavigationBarItem(
-      icon: Icon(Icons.edit_document),
-      label: 'Rapor & Destek',
-    ),
+    BottomNavigationBarItem(icon: Icon(Icons.edit_document), label: 'Raporlar'),
   ];
 
   final List<Widget> pages = [
@@ -46,8 +44,7 @@ class _MainPageState extends State<MainPage> {
     'Paylaşımlar',
     'Profil Fotoğrafları',
     'Biolar',
-
-    'Raporlar & Destek',
+    'Raporlar',
   ];
 
   @override
@@ -70,6 +67,34 @@ class _MainPageState extends State<MainPage> {
             appBarTitles[state.currentPage ?? 0],
             style: TextStyle(fontSize: 14),
           ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (ctx) => SupportsPage()),
+                );
+              },
+              icon: Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: (const Color.fromARGB(
+                    255,
+                    75,
+                    75,
+                    75,
+                  )).withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  Icons.contact_support,
+                  color: const Color.fromARGB(255, 27, 27, 27),
+                  size: 21,
+                ),
+              ),
+            ),
+          ],
         ),
         body: pages[state.currentPage ?? 0],
         bottomNavigationBar: BottomNavigationBar(
