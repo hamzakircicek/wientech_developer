@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wien_tech_admin/bloc/support_bloc/bloc.dart';
 import 'package:wien_tech_admin/bloc/support_bloc/event.dart';
 import 'package:wien_tech_admin/bloc/support_bloc/state.dart';
 import 'package:wien_tech_admin/models/supports_model.dart';
+import 'package:wien_tech_admin/pages/support_detail_page.dart';
 
 class SupportsPage extends StatefulWidget {
   final String? userId;
@@ -85,40 +87,76 @@ class _SupportsPageState extends State<SupportsPage> {
   }
 
   Widget _supportsWidget(SupportModel support) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.grey.withAlpha(25),
-        borderRadius: BorderRadius.circular(10),
+    return InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SupportDetailPage(support: support),
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 10,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(typeParseSupportType(support.type)),
-              Container(
-                decoration: BoxDecoration(
-                  color: getStatusColor(support.supportStatus),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 2,
+      child: Container(
+        margin: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.grey.withAlpha(25),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+
+          spacing: 30,
+          children: [
+            Row(
+              spacing: 10,
+              children: [
+                Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(shape: BoxShape.circle),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(80),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      placeholder: (c, _) => const SizedBox(),
+
+                      imageUrl: support.user.userProfilePhotoUrl,
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.broken_image, color: Colors.grey),
+                    ),
                   ),
-                  child: Center(
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(support.user.userName),
+                    Text(support.user.id),
+                  ],
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(typeParseSupportType(support.type)),
+                Container(
+                  decoration: BoxDecoration(
+                    color: getStatusColor(support.supportStatus),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 2,
+                    ),
                     child: Text(typeParseSupportStatus(support.supportStatus)),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Text(support.message),
-        ],
+              ],
+            ),
+            Text(support.message),
+          ],
+        ),
       ),
     );
   }

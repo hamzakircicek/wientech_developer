@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wien_tech_admin/api_services/api_service.dart';
+import 'package:wien_tech_admin/api_services/secure_storage_serv%C4%B1ce.dart';
 import 'package:wien_tech_admin/bloc/login_bloc/event.dart';
 import 'package:wien_tech_admin/bloc/login_bloc/state.dart';
 import 'package:wien_tech_admin/pages/main_page.dart';
@@ -22,7 +25,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
       if (registerRes.status) {
         emit(state.copyWith(loginStatus: LoginStatus.success));
-        Navigator.push(
+        await UserSecureStorageService.saveToken(registerRes.token ?? '');
+        Navigator.pushReplacement(
           event.context,
           MaterialPageRoute(builder: (ctx) => MainPage()),
         );

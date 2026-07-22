@@ -5,6 +5,7 @@ import 'package:wien_tech_admin/models/post_model.dart';
 
 import 'package:wien_tech_admin/models/reports_model.dart';
 import 'package:wien_tech_admin/models/user_model.dart';
+import 'package:wien_tech_admin/pages/reports_detail_page.dart';
 import 'package:wien_tech_admin/pages/user_detail_page.dart';
 
 class ReportWidget extends StatelessWidget {
@@ -15,40 +16,46 @@ class ReportWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 240, 240, 240),
-          borderRadius: BorderRadius.circular(10),
+      child: InkWell(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (ctx) => ReportDetailPage(report: report)),
         ),
-        child: Column(
-          children: [
-            Column(
-              children: [
-                _userInfo(context: context, user: report.reporterUser),
-                Icon(Icons.keyboard_arrow_down),
-                _userInfo(context: context, user: report.reportedUser),
-                if (report.reportTargetType == 'post')
-                  report.post != null
-                      ? _postReport(post: report.post!)
-                      : Text('Bu post silinmiş'),
-                if (report.reportTargetType == 'user')
-                  Text('Profil Şikayeti, bu profili incele'),
-                if (report.reportTargetType == 'conversation')
-                  _conversationReport(
-                    message: report.message,
-                    mediaList: report.mediaList!,
-                  ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 240, 240, 240),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            children: [
+              Column(
+                children: [
+                  _userInfo(context: context, user: report.reporterUser),
+                  Icon(Icons.keyboard_arrow_down),
+                  _userInfo(context: context, user: report.reportedUser),
+                  if (report.reportTargetType == 'post')
+                    report.post != null
+                        ? _postReport(post: report.post!)
+                        : Text('Bu post silinmiş'),
+                  if (report.reportTargetType == 'user')
+                    Text('Profil Şikayeti, bu profili incele'),
+                  if (report.reportTargetType == 'conversation')
+                    _conversationReport(
+                      message: report.message,
+                      mediaList: report.mediaList!,
+                    ),
 
-                _reportTypes(
-                  context: context,
-                  reportType: report.reportType,
-                  repostTargetType: report.reportTargetType,
-                  colorOne: const Color.fromARGB(255, 225, 37, 99),
-                  colorTwo: const Color.fromARGB(255, 45, 106, 220),
-                ),
-              ],
-            ),
-          ],
+                  _reportTypes(
+                    context: context,
+                    reportType: report.reportType,
+                    repostTargetType: report.reportTargetType,
+                    colorOne: const Color.fromARGB(255, 225, 37, 99),
+                    colorTwo: const Color.fromARGB(255, 45, 106, 220),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
