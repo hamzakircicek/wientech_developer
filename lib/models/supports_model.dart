@@ -34,11 +34,13 @@ class AllSupportsModel {
 }
 
 class SupportModel {
+  final String id;
   final SupportType type;
   final String message;
   final SupportUserModel user;
   final SupportStatus supportStatus;
   SupportModel({
+    required this.id,
     required this.type,
     required this.supportStatus,
     required this.user,
@@ -46,6 +48,7 @@ class SupportModel {
   });
 
   factory SupportModel.fromJson(Map<String, dynamic> json) => SupportModel(
+    id: json['_id'],
     type: parseSupportType(json['support_type']),
     message: json['message'],
     user: SupportUserModel.fromJson(json['supported_user']),

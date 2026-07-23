@@ -23,6 +23,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         userName: event.userName,
         pass: event.password,
       );
+
       if (registerRes.status) {
         emit(state.copyWith(loginStatus: LoginStatus.success));
         await UserSecureStorageService.saveToken(registerRes.token ?? '');

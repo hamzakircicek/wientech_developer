@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:wien_tech_admin/api_services/api_service.dart';
 import 'package:wien_tech_admin/models/user_model.dart';
 import 'package:wien_tech_admin/pages/logs_page.dart';
 import 'package:wien_tech_admin/pages/supports_page.dart';
@@ -72,6 +73,39 @@ class UserDetailPage extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+              ),
+
+              SizedBox(
+                height: 30,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  onPressed: () async {
+                    final res = await ApiService.banUser(userId: user.id);
+                    if (res) {
+                      print('ban basarili kral');
+                    }
+                  },
+                  child: Text(
+                    'Kullaniciyi Banla',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  onPressed: () async {
+                    final res = await ApiService.removeBanUser(userId: user.id);
+                    if (res) {
+                      print('ban kaldirma islemi basarili kral');
+                    }
+                  },
+                  child: Text(
+                    'Kullanici Banini Kaldir',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
               SizedBox(

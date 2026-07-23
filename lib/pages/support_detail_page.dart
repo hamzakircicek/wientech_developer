@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wien_tech_admin/api_services/api_service.dart';
 import 'package:wien_tech_admin/models/supports_model.dart';
 
 class SupportDetailPage extends StatelessWidget {
@@ -14,6 +15,15 @@ class SupportDetailPage extends StatelessWidget {
           Text(support.user.userName),
           Text(support.user.userName),
           Text(typeParseSupportStatus(support.supportStatus)),
+          ElevatedButton(
+            onPressed: () async {
+              final res = await ApiService.setSupport(supportId: support.id);
+              if (res) {
+                print('Destek basariyla buncellendi');
+              }
+            },
+            child: Center(child: Text('Destek Talebini Guncelle')),
+          ),
         ],
       ),
     );
