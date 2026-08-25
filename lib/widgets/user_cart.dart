@@ -44,13 +44,22 @@ class UserCart extends StatelessWidget {
                 ),
               ),
               Column(
+                spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('İsim: ${user.userName}'),
                   Text('Id: ${user.id}'),
-                  Text('Bio: ${user.bio}'),
-                  Text('Yaş: ${user.age}'),
+                  if (user.bio.isNotEmpty)
+                    SizedBox(
+                      width: 250,
+                      child: Text(
+                        'Bio: ${user.bio}',
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  if (user.age.isNotEmpty) Text('Yaş: ${user.age}'),
                   Text('Cinsiyet: ${user.gender}'),
                 ],
               ),

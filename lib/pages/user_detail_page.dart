@@ -92,6 +92,25 @@ class UserDetailPage extends StatelessWidget {
                   ),
                 ),
               ),
+
+              SizedBox(
+                height: 30,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  onPressed: () async {
+                    final res = await ApiService.removeUserName(
+                      userId: user.id,
+                    );
+                    if (res) {
+                      print('user name başarıyla silindi');
+                    }
+                  },
+                  child: Text(
+                    'Kullanıcı ismini sil',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 30,
                 child: ElevatedButton(
