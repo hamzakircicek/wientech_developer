@@ -56,7 +56,17 @@ class BioWidget extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: [Text(bio.user.userName), Text(bio.bio)],
+                          children: [
+                            Text(bio.user.userName),
+                            SizedBox(
+                              width: 250,
+                              child: Text(
+                                bio.bio,
+                                maxLines: 4,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
