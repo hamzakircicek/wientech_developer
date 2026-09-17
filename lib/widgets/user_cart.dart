@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wien_tech_admin/bloc/main_page_bloc/bloc.dart';
 import 'package:wien_tech_admin/models/user_model.dart';
 import 'package:wien_tech_admin/pages/user_detail_page.dart';
 
@@ -9,6 +11,12 @@ class UserCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final adminId = context.read<MainPageBloc>().state.adminId;
+
+    final isSpecialAdmin = adminId == '6aab255b26c10b0ab96fc625';
+
+    final isFemale = user.gender == 'female';
+    final canShowImages = isSpecialAdmin || !isFemale;
     return InkWell(
       onTap: () => Navigator.push(
         context,
@@ -27,22 +35,23 @@ class UserCart extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
             children: [
-              Container(
-                height: 60,
-                width: 60,
-                decoration: BoxDecoration(shape: BoxShape.circle),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(80),
-                  child: CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    placeholder: (c, _) => const SizedBox(),
-                    cacheKey: user.profilePhotoKey,
-                    imageUrl: user.profilePhotoUrl,
-                    errorWidget: (context, url, error) =>
-                        Icon(Icons.broken_image, color: Colors.grey),
+              if (canShowImages)
+                Container(
+                  height: 60,
+                  width: 60,
+                  decoration: BoxDecoration(shape: BoxShape.circle),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(80),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      placeholder: (c, _) => const SizedBox(),
+                      cacheKey: user.profilePhotoKey,
+                      imageUrl: user.profilePhotoUrl,
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.broken_image, color: Colors.grey),
+                    ),
                   ),
                 ),
-              ),
               Column(
                 spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,10 +69,24 @@ class UserCart extends StatelessWidget {
                       ),
                     ),
                   if (user.age.isNotEmpty) Text('Yaş: ${user.age}'),
-                  Text('Cinsiyet: ${user.gender}'),
+                  Text(
+                    'Cinsiyet: ${user.gender}',
+                    style: TextStyle(
+                      color: user.gender == "male"
+                          ? Colors.blue
+                          : const Color.fromARGB(255, 232, 76, 128),
+                    ),
+                  ),
                 ],
               ),
-              Text(user.isDeleted ? 'Silindi' : 'Aktif'),
+              Text(
+                user.isDeleted ? 'Silindi' : 'Aktif',
+                style: TextStyle(
+                  color: user.isDeleted
+                      ? Colors.red
+                      : const Color.fromARGB(255, 25, 132, 80),
+                ),
+              ),
             ],
           ),
         ),

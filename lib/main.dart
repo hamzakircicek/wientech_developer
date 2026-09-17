@@ -14,7 +14,6 @@ import 'package:wien_tech_admin/bloc/support_bloc/bloc.dart';
 import 'package:wien_tech_admin/bloc/users_bloc/bloc.dart';
 import 'package:wien_tech_admin/firebase_options.dart';
 import 'package:wien_tech_admin/pages/login.dart';
-import 'package:wien_tech_admin/pages/main_page.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

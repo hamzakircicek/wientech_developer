@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wien_tech_admin/api_services/firebase_services.dart';
+import 'package:wien_tech_admin/api_services/secure_storage_serv%C4%B1ce.dart';
 import 'package:wien_tech_admin/bloc/main_page_bloc/bloc.dart';
 import 'package:wien_tech_admin/bloc/main_page_bloc/event.dart';
 import 'package:wien_tech_admin/bloc/main_page_bloc/state.dart';
@@ -19,43 +20,80 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final List<BottomNavigationBarItem> items = [
-    BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Kullanıcılar'),
-    BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Paylaşımlar'),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.person),
-      label: 'Profil Fotoğrafları',
-    ),
-    BottomNavigationBarItem(icon: Icon(Icons.edit), label: 'Biolar'),
+  List<BottomNavigationBarItem> items(BuildContext context) {
+    final adminId = context.read<MainPageBloc>().state.adminId;
+    print('addddddminiddddd');
+    print(adminId);
+    final isSpecialAdmin = adminId != '6aab255b26c10b0ab96fc625';
+    return [
+      BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Kullanıcılar'),
+      BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Post'),
+      BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Pp'),
+      BottomNavigationBarItem(icon: Icon(Icons.edit), label: 'Bio'),
+      if (isSpecialAdmin)
+        BottomNavigationBarItem(
+          icon: Icon(Icons.edit_document),
+          label: 'Rapor',
+        ),
 
-    BottomNavigationBarItem(icon: Icon(Icons.edit_document), label: 'Raporlar'),
-  ];
+      if (isSpecialAdmin)
+        BottomNavigationBarItem(
+          icon: Container(
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+              color: (const Color.fromARGB(255, 75, 75, 75)).withOpacity(0.12),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Icon(
+              Icons.contact_support,
+              color: const Color.fromARGB(255, 27, 27, 27),
+              size: 21,
+            ),
+          ),
+          label: 'Destek',
+        ),
+    ];
+  }
 
-  final List<Widget> pages = [
+  List<Widget> pages(BuildContext context) => [
     UsersPage(),
     PostsPage(),
     NewProfilePhotosPage(),
     NewBiosPage(),
-    ReportsPage(),
+    if (context.read<MainPageBloc>().state.adminId! !=
+        '6aab255b26c10b0ab96fc625')
+      ReportsPage(),
+    if (context.read<MainPageBloc>().state.adminId! !=
+        '6aab255b26c10b0ab96fc625')
+      SupportsPage(),
   ];
 
-  final List<String> appBarTitles = [
+  List<String> appBarTitles(BuildContext context) => [
     'Kullanıcılar',
-    'Paylaşımlar',
-    'Profil Fotoğrafları',
-    'Biolar',
-    'Raporlar',
+    'Post',
+    'Pp',
+    'Bio',
+    if (context.read<MainPageBloc>().state.adminId! !=
+        '6aab255b26c10b0ab96fc625')
+      'Rapor',
+    if (context.read<MainPageBloc>().state.adminId! !=
+        '6aab255b26c10b0ab96fc625')
+      'Destek',
   ];
-
+  late final String? myId;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     initFirebaseServices();
   }
 
   Future<void> initFirebaseServices() async {
-    await FirebaseNotificationService.init();
+    myId = await UserSecureStorageService.getMyId() ?? '';
+    print(myId);
+    await FirebaseNotificationService.init(adminId: myId!);
   }
 
   @override
@@ -64,39 +102,11 @@ class _MainPageState extends State<MainPage> {
       builder: (context, state) => Scaffold(
         appBar: AppBar(
           title: Text(
-            appBarTitles[state.currentPage ?? 0],
+            appBarTitles(context)[state.currentPage ?? 0],
             style: TextStyle(fontSize: 14),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (ctx) => SupportsPage()),
-                );
-              },
-              icon: Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  color: (const Color.fromARGB(
-                    255,
-                    75,
-                    75,
-                    75,
-                  )).withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Icon(
-                  Icons.contact_support,
-                  color: const Color.fromARGB(255, 27, 27, 27),
-                  size: 21,
-                ),
-              ),
-            ),
-          ],
         ),
-        body: pages[state.currentPage ?? 0],
+        body: pages(context)[state.currentPage ?? 0],
         bottomNavigationBar: BottomNavigationBar(
           selectedItemColor: Colors.black,
           unselectedItemColor: Colors.grey,
@@ -108,7 +118,7 @@ class _MainPageState extends State<MainPage> {
           onTap: (value) {
             context.read<MainPageBloc>().add(ChangePageEvent(pageIndex: value));
           },
-          items: items,
+          items: items(context),
         ),
       ),
     );

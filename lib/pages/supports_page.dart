@@ -19,7 +19,6 @@ class _SupportsPageState extends State<SupportsPage> {
   final ScrollController _sController = ScrollController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final supportBloc = context.read<SupportBloc>();
@@ -43,9 +42,6 @@ class _SupportsPageState extends State<SupportsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Destek Taleplerim', style: TextStyle(fontSize: 14)),
-      ),
       body: BlocBuilder<SupportBloc, SupportState>(
         builder: (context, state) {
           if (state.loadingStatus == SupportLoadingStatus.loading) {

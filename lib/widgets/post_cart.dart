@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:wien_tech_admin/bloc/main_page_bloc/bloc.dart';
 import 'package:wien_tech_admin/bloc/post_page_bloc/bloc.dart';
 import 'package:wien_tech_admin/bloc/post_page_bloc/event.dart';
 import 'package:wien_tech_admin/models/post_model.dart';
@@ -13,6 +14,13 @@ class PostCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final adminId = context.read<MainPageBloc>().state.adminId;
+
+    final isSpecialAdmin = adminId == '6aab255b26c10b0ab96fc625';
+
+    final isFemale = post.user.gender == 'female';
+
+    final canShowImages = isSpecialAdmin || !isFemale;
     final formattedDate = DateFormat(
       'dd.MM.yyyy HH:mm',
     ).format(DateTime.parse(post.createdAt).toLocal());
@@ -44,24 +52,25 @@ class PostCart extends StatelessWidget {
                       Row(
                         spacing: 10,
                         children: [
-                          Container(
-                            height: 60,
-                            width: 60,
-                            decoration: BoxDecoration(shape: BoxShape.circle),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(80),
-                              child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                placeholder: (c, _) => const SizedBox(),
-                                cacheKey: post.user.profilePhotoKey,
-                                imageUrl: post.user.profilePhotoUrl,
-                                errorWidget: (context, url, error) => Icon(
-                                  Icons.broken_image,
-                                  color: Colors.grey,
+                          if (canShowImages)
+                            Container(
+                              height: 60,
+                              width: 60,
+                              decoration: BoxDecoration(shape: BoxShape.circle),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(80),
+                                child: CachedNetworkImage(
+                                  fit: BoxFit.cover,
+                                  placeholder: (c, _) => const SizedBox(),
+                                  cacheKey: post.user.profilePhotoKey,
+                                  imageUrl: post.user.profilePhotoUrl,
+                                  errorWidget: (context, url, error) => Icon(
+                                    Icons.broken_image,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -73,31 +82,34 @@ class PostCart extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: GridView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                        ),
-                        itemCount: post.mediaList.length,
-                        itemBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                placeholder: (c, _) => const SizedBox(),
-                                cacheKey: post.mediaList[index].cdnKey,
-                                imageUrl: post.mediaList[index].cdnUrl,
-                                errorWidget: (context, url, error) => Icon(
-                                  Icons.broken_image,
-                                  color: Colors.grey,
+                  if (canShowImages)
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: GridView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                              ),
+                          itemCount: post.mediaList.length,
+                          itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: CachedNetworkImage(
+                                  fit: BoxFit.cover,
+                                  placeholder: (c, _) => const SizedBox(),
+                                  cacheKey: post.mediaList[index].cdnKey,
+                                  imageUrl: post.mediaList[index].cdnUrl,
+                                  errorWidget: (context, url, error) => Icon(
+                                    Icons.broken_image,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ),
                             ),
@@ -105,7 +117,9 @@ class PostCart extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
+                  if (isFemale && !isSpecialAdmin)
+                    Text('Kadin Kullanici postu'),
+                  SizedBox(height: 10),
                   Text(formattedDate),
                 ],
               ),

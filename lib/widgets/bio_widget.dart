@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wien_tech_admin/bloc/main_page_bloc/bloc.dart';
 import 'package:wien_tech_admin/models/bio_model.dart';
 import 'package:wien_tech_admin/pages/user_detail_page.dart';
 
@@ -10,6 +12,12 @@ class BioWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final adminId = context.read<MainPageBloc>().state.adminId;
+
+    final isSpecialAdmin = adminId == '6aab255b26c10b0ab96fc625';
+
+    final isFemale = bio.user.gender == 'female';
+    final canShowImages = isSpecialAdmin || !isFemale;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
@@ -37,27 +45,31 @@ class BioWidget extends StatelessWidget {
                     Row(
                       spacing: 10,
                       children: [
-                        Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(shape: BoxShape.circle),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(80),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              placeholder: (c, _) => const SizedBox(),
-                              cacheKey: bio.user.profilePhotoKey,
-                              imageUrl: bio.user.profilePhotoUrl,
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.broken_image, color: Colors.grey),
+                        if (canShowImages)
+                          Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(shape: BoxShape.circle),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(80),
+                              child: CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                placeholder: (c, _) => const SizedBox(),
+                                cacheKey: bio.user.profilePhotoKey,
+                                imageUrl: bio.user.profilePhotoUrl,
+                                errorWidget: (context, url, error) => Icon(
+                                  Icons.broken_image,
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(bio.user.userName),
+
                             SizedBox(
                               width: 250,
                               child: Text(

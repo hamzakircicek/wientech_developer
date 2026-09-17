@@ -5,4 +5,9 @@ class ChangePageEvent extends MainPageEvent {
   ChangePageEvent({required this.pageIndex});
 }
 
+class AddAdminIdEvent extends MainPageEvent {
+  String adminId;
+  AddAdminIdEvent({required this.adminId});
+}
+
 class GetPosts extends MainPageEvent {}

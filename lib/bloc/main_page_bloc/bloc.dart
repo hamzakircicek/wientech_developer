@@ -5,10 +5,15 @@ import 'package:wien_tech_admin/bloc/main_page_bloc/state.dart';
 class MainPageBloc extends Bloc<MainPageEvent, MainPageState> {
   MainPageBloc() : super(MainPageState()) {
     on<ChangePageEvent>(_changePageEvent);
+    on<AddAdminIdEvent>(_addAdminIdEvent);
   }
 
   void _changePageEvent(ChangePageEvent event, Emitter<MainPageState> emit) {
     emit(state.copyWith(currentPage: event.pageIndex));
+  }
+
+  void _addAdminIdEvent(AddAdminIdEvent event, Emitter<MainPageState> emit) {
+    emit(state.copyWith(adminId: event.adminId));
   }
 
   // Future<void> _getPosts(GetPosts event, Emitter<MainPageState> emit) async {
