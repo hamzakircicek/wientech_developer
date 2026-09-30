@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wien_tech_admin/api_services/api_service.dart';
 import 'package:wien_tech_admin/bloc/users_bloc/bloc.dart';
 import 'package:wien_tech_admin/bloc/users_bloc/event.dart';
 import 'package:wien_tech_admin/bloc/users_bloc/state.dart';
@@ -31,10 +32,14 @@ class _UsersPageState extends State<UsersPage> {
         } else if (state.status == UserPageStatus.failure) {
           return Center(child: Text('bir hata oluştu'));
         } else {
-          return ListView.builder(
-            itemCount: state.userList!.length,
-            itemBuilder: (context, index) =>
-                UserCart(user: state.userList![index]),
+          return RefreshIndicator(
+            onRefresh: () async =>
+                context.read<UsersPageBloc>().add(GetUsers()),
+            child: ListView.builder(
+              itemCount: state.userList!.length,
+              itemBuilder: (context, index) =>
+                  UserCart(user: state.userList![index]),
+            ),
           );
         }
       },

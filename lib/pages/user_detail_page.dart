@@ -56,7 +56,28 @@ class UserDetailPage extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      final res = await ApiService.removeProfilePhoto(
+                        userId: user.id,
+                        mediaKey: user.profilePhotoKey,
+                      );
+
+                      if (res) {
+                        Fluttertoast.showToast(
+                          backgroundColor: const Color.fromARGB(
+                            238,
+                            224,
+                            224,
+                            224,
+                          ),
+                          textColor: Colors.black,
+                          fontSize: 14,
+                          msg: 'Profil fotoğrafın başarıyla silindi',
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.BOTTOM,
+                        );
+                      }
+                    },
                     child: Text(
                       'Profil Fotografini Sil',
                       style: TextStyle(color: Colors.white),
@@ -92,7 +113,6 @@ class UserDetailPage extends StatelessWidget {
                     ),
                 ],
               ),
-
               SizedBox(
                 height: 30,
                 child: ElevatedButton(
@@ -118,7 +138,39 @@ class UserDetailPage extends StatelessWidget {
                     }
                   },
                   child: Text(
-                    'Kullanıcı ismini sil',
+                    'Kullanıcı İsmini Sil',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  onPressed: () async {
+                    final res = await ApiService.changeUserGender(
+                      userId: user.id,
+                      gender: user.gender,
+                      photoKey: user.profilePhotoKey,
+                    );
+                    if (res.status) {
+                      Fluttertoast.showToast(
+                        backgroundColor: const Color.fromARGB(
+                          238,
+                          224,
+                          224,
+                          224,
+                        ),
+                        textColor: Colors.black,
+                        fontSize: 14,
+                        msg: 'Cinsiyet değiştirildi',
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.BOTTOM,
+                      );
+                    }
+                  },
+                  child: Text(
+                    'Kullanıcı Cinsiyetini Değiştir',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

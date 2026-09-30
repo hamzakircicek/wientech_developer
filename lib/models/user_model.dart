@@ -1,10 +1,10 @@
-class UserModel {
+class UsersModel {
   final bool status;
   final List<User> userlist;
   final Cursor? cursor;
-  UserModel({required this.status, required this.userlist, this.cursor});
+  UsersModel({required this.status, required this.userlist, this.cursor});
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+  factory UsersModel.fromJson(Map<String, dynamic> json) => UsersModel(
     status: json['status'] ?? false,
     userlist: json['users'] != null ? getUserList(json['users']) : [],
     cursor: json.containsKey('nextCursor')
@@ -15,6 +15,18 @@ class UserModel {
   static List<User> getUserList(List json) {
     return json.map((e) => User.fromJson(e)).toList();
   }
+}
+
+class UserModel {
+  final bool status;
+  final User user;
+
+  UserModel({required this.status, required this.user});
+
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+    status: json['status'] ?? false,
+    user: User.fromJson(json['user']),
+  );
 }
 
 class User {
