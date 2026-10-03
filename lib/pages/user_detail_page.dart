@@ -54,7 +54,7 @@ class UserDetailPage extends StatelessWidget {
                     ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: const Color.fromARGB(255, 111, 102, 244),
                     ),
                     onPressed: () async {
                       final res = await ApiService.removeProfilePhoto(
@@ -83,6 +83,68 @@ class UserDetailPage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
+
+                  SizedBox(
+                    height: 30,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
+                      onPressed: () async {
+                        final res = await ApiService.banUser(userId: user.id);
+                        if (res) {
+                          Fluttertoast.showToast(
+                            backgroundColor: const Color.fromARGB(
+                              238,
+                              224,
+                              224,
+                              224,
+                            ),
+                            textColor: Colors.black,
+                            fontSize: 14,
+                            msg: 'Kullanici banlandi',
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                          );
+                        }
+                      },
+                      child: Text(
+                        'Kullaniciyi Banla',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 50, 105, 144),
+                    ),
+                    onPressed: () async {
+                      final res = await ApiService.throwUserBack(
+                        userId: user.id,
+                      );
+
+                      if (res) {
+                        Fluttertoast.showToast(
+                          backgroundColor: const Color.fromARGB(
+                            238,
+                            224,
+                            224,
+                            224,
+                          ),
+                          textColor: Colors.black,
+                          fontSize: 14,
+                          msg: 'Kullanıcı listenin sonlarına atıldı',
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.BOTTOM,
+                        );
+                      }
+                    },
+                    child: Text(
+                      'Kullanıcıyı listenin sonlarına at',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ],
               ),
               Column(
@@ -103,7 +165,12 @@ class UserDetailPage extends StatelessWidget {
                   if (user.bio.isNotEmpty)
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
+                        backgroundColor: const Color.fromARGB(
+                          255,
+                          149,
+                          54,
+                          244,
+                        ),
                       ),
                       onPressed: () {},
                       child: Text(
@@ -116,7 +183,9 @@ class UserDetailPage extends StatelessWidget {
               SizedBox(
                 height: 30,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 238, 54, 244),
+                  ),
                   onPressed: () async {
                     final res = await ApiService.removeUserName(
                       userId: user.id,
@@ -146,7 +215,9 @@ class UserDetailPage extends StatelessWidget {
               SizedBox(
                 height: 30,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 208, 104, 187),
+                  ),
                   onPressed: () async {
                     final res = await ApiService.changeUserGender(
                       userId: user.id,
@@ -179,35 +250,9 @@ class UserDetailPage extends StatelessWidget {
               SizedBox(
                 height: 30,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                  onPressed: () async {
-                    final res = await ApiService.banUser(userId: user.id);
-                    if (res) {
-                      Fluttertoast.showToast(
-                        backgroundColor: const Color.fromARGB(
-                          238,
-                          224,
-                          224,
-                          224,
-                        ),
-                        textColor: Colors.black,
-                        fontSize: 14,
-                        msg: 'Kullanici banlandi',
-                        toastLength: Toast.LENGTH_LONG,
-                        gravity: ToastGravity.BOTTOM,
-                      );
-                    }
-                  },
-                  child: Text(
-                    'Kullaniciyi Banla',
-                    style: TextStyle(color: Colors.white),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 25, 141, 67),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                   onPressed: () async {
                     final res = await ApiService.removeBanUser(userId: user.id);
                     if (res) {
